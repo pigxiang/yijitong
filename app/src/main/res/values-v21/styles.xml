@@ -1,0 +1,11 @@
+<resources>>
+
+
+    <style name="Theme.MyTheme" parent="Theme.AppCompat.Light">
+        <!-- Set AppCompat’s color theming attrs -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <!-- Other attributes -->
+    </style>
+
+</resources>
