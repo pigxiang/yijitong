@@ -63,22 +63,21 @@ public class MainActivity extends AppCompatActivity {
 
             SharedPreferences sharedPref = getActivity().getPreferences(Context.MODE_PRIVATE);
             String iccid = sharedPref.getString("iccid", "");
-            SharedPreferences.Editor editor = sharedPref.edit();
 
             if ("".equals(iccid)) {
                 TelephonyManager tm = (TelephonyManager) MainActivity.this.getSystemService(Context.TELEPHONY_SERVICE);
                 iccid = tm.getSimSerialNumber();
             }
 
+            SharedPreferences.Editor editor = sharedPref.edit();
             editor.putString("phone", phone);
             editor.putString("password", password);
             editor.putString("iccid", iccid);
             editor.commit();
 
             user = new YJT(phone, password, iccid);
-
-
             String result = user.attendance();
+
             Message msg = new Message();
             msg.what = 0;
             Bundle bundle = new Bundle();
