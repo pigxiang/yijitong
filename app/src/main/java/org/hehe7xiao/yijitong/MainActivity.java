@@ -9,6 +9,7 @@ import android.os.Message;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.telephony.TelephonyManager;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -59,18 +60,23 @@ public class MainActivity extends AppCompatActivity {
         public void run() {
             String phone = ((EditText) findViewById(R.id.phone)).getText().toString();
             String password = ((EditText) findViewById(R.id.password)).getText().toString();
-            String iccid = ((EditText) findViewById(R.id.iccid)).getText().toString();
-            String userid = ((EditText) findViewById(R.id.userid)).getText().toString();
 
             SharedPreferences sharedPref = getActivity().getPreferences(Context.MODE_PRIVATE);
+            String iccid = sharedPref.getString("iccid", "");
             SharedPreferences.Editor editor = sharedPref.edit();
+
+            if ("".equals(iccid)) {
+                TelephonyManager tm = (TelephonyManager) MainActivity.this.getSystemService(Context.TELEPHONY_SERVICE);
+                iccid = tm.getSimSerialNumber();
+            }
+
             editor.putString("phone", phone);
             editor.putString("password", password);
             editor.putString("iccid", iccid);
-            editor.putString("userid", userid);
             editor.commit();
 
-            user = new YJT(phone, password, iccid, userid);
+            user = new YJT(phone, password, iccid);
+
 
             String result = user.attendance();
             Message msg = new Message();
@@ -112,18 +118,12 @@ public class MainActivity extends AppCompatActivity {
     private void handleEditText() {
         EditText phoneEdit = (EditText) findViewById(R.id.phone);
         EditText passwordEdit = (EditText) findViewById(R.id.password);
-        EditText iccidEdit = (EditText) findViewById(R.id.iccid);
-        EditText useridEdit = (EditText) findViewById(R.id.userid);
 
         SharedPreferences sharedPref = getActivity().getPreferences(Context.MODE_PRIVATE);
         String phone = sharedPref.getString("phone", "");
         String password = sharedPref.getString("password", "");
-        String iccid = sharedPref.getString("iccid", "");
-        String userid = sharedPref.getString("userid", "");
 
         if (!"".equals(phone)) phoneEdit.setText(phone);
         if (!"".equals(password)) passwordEdit.setText(password);
-        if (!"".equals(iccid)) iccidEdit.setText(iccid);
-        if (!"".equals(userid)) useridEdit.setText(userid);
     }
 }
