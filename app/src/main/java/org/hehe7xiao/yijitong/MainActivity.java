@@ -13,13 +13,20 @@ import android.telephony.TelephonyManager;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
+
+import java.util.List;
 
 
 public class MainActivity extends AppCompatActivity {
 
     private YJT user;
+    private List<Geo> geos = Data.geos;
+    private Geo geo = geos.get(0);
 
     private Handler handler = new Handler() {
         @Override
@@ -39,6 +46,7 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        handleSpinner();
         handleEditText();
         tv = (TextView) findViewById(R.id.tv);
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -75,7 +83,8 @@ public class MainActivity extends AppCompatActivity {
             editor.putString("iccid", iccid);
             editor.commit();
 
-            user = new YJT(phone, password, iccid);
+            user = new YJT(phone, password, iccid, geo);
+//            user = new YJT(phone, password, iccid);
             String result = user.attendance();
 
             Message msg = new Message();
@@ -124,5 +133,24 @@ public class MainActivity extends AppCompatActivity {
 
         if (!"".equals(phone)) phoneEdit.setText(phone);
         if (!"".equals(password)) passwordEdit.setText(password);
+    }
+
+    private void handleSpinner() {
+        Spinner spinner = (Spinner) findViewById(R.id.geo);
+        ArrayAdapter<Geo> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, geos);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        //绑定 Adapter到控件
+        spinner.setAdapter(adapter);
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
+                geo = geos.get(pos);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                // Another interface callback
+            }
+        });
     }
 }

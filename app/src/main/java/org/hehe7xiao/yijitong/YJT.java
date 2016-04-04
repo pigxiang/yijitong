@@ -24,6 +24,7 @@ public class YJT {
     private String custUniqueId;
     private String custVCode;
     private boolean isLogin = false;
+    private Geo geo = null;
 
     public String getUserid() {
         return userid;
@@ -47,6 +48,13 @@ public class YJT {
         this.phone = phone;
         this.password = password;
         this.iccid = iccid;
+    }
+
+    public YJT(String phone, String password, String iccid, Geo geo) {
+        this.phone = phone;
+        this.password = password;
+        this.iccid = iccid;
+        this.geo = geo;
     }
 
     public boolean clientLogin() {
@@ -135,6 +143,8 @@ public class YJT {
         if (!this.isLogin) {
             login2 = this.clientLogin() && this.login();
         }
+        final String positionData = this.geo != null ? geo.getCoordinate() : "39.962536,116.229567";
+        final String positionDescription = this.geo != null ? geo.getAddress() : "中国北京市海淀区杏石口路99号";
         if (login2) {
             String url = this.url + "/yjtoa/s/signins/attendances";
             HashMap<String, Object> fields = new HashMap<String, Object>() {
@@ -142,8 +152,8 @@ public class YJT {
                     put("descColor", 0);
                     put("iccId", iccid);
                     put("id", 0);
-                    put("positionData", "39.962536,116.229567");
-                    put("positionDescription", "中国北京市海淀区杏石口路99号");
+                    put("positionData", positionData);
+                    put("positionDescription", positionDescription);
                     put("resultColor", 0);
                     put("signResult", 0);
                     put("type", "VISIT");
