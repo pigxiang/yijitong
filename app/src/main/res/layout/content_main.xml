@@ -37,6 +37,7 @@
         <Spinner
             android:id="@+id/geo"
             android:layout_width="fill_parent"
+            android:layout_marginTop="10dp"
             android:layout_height="wrap_content"/>
 
         <TextView
@@ -44,6 +45,7 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
+            android:layout_marginTop="20dp"
             android:text=""/>
     </LinearLayout>
 
