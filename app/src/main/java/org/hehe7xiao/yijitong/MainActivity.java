@@ -15,6 +15,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -49,6 +50,7 @@ public class MainActivity extends AppCompatActivity {
 
         handleSpinner();
         handleEditText();
+        handleButton();
         tv = (TextView) findViewById(R.id.tv);
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -64,19 +66,30 @@ public class MainActivity extends AppCompatActivity {
         return this;
     }
 
+    private String readIccid() {
+        String iccid = "";
+        try {
+            TelephonyManager tm = (TelephonyManager) MainActivity.this.getSystemService(Context.TELEPHONY_SERVICE);
+            iccid = tm.getSimSerialNumber();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return iccid;
+    }
+
     private class WorkThread extends Thread {
         @Override
         public void run() {
             String phone = ((EditText) findViewById(R.id.phone)).getText().toString();
             String password = ((EditText) findViewById(R.id.password)).getText().toString();
+            String iccid = ((EditText) findViewById(R.id.iccid)).getText().toString();
 
             SharedPreferences sharedPref = getActivity().getPreferences(Context.MODE_PRIVATE);
-            String iccid = sharedPref.getString("iccid", "");
-
-            if ("".equals(iccid)) {
-                TelephonyManager tm = (TelephonyManager) MainActivity.this.getSystemService(Context.TELEPHONY_SERVICE);
-                iccid = tm.getSimSerialNumber();
-            }
+//            String iccid = sharedPref.getString("iccid", "");
+//
+//            if ("".equals(iccid)) {
+//                iccid = readIccid();
+//            }
 
             SharedPreferences.Editor editor = sharedPref.edit();
             editor.putString("phone", phone);
@@ -129,13 +142,16 @@ public class MainActivity extends AppCompatActivity {
     private void handleEditText() {
         EditText phoneEdit = (EditText) findViewById(R.id.phone);
         EditText passwordEdit = (EditText) findViewById(R.id.password);
+        EditText iccidEdit = (EditText) findViewById(R.id.iccid);
 
         SharedPreferences sharedPref = getActivity().getPreferences(Context.MODE_PRIVATE);
         String phone = sharedPref.getString("phone", "");
         String password = sharedPref.getString("password", "");
+        String iccid = sharedPref.getString("iccid", "");
 
         if (!"".equals(phone)) phoneEdit.setText(phone);
         if (!"".equals(password)) passwordEdit.setText(password);
+        if (!"".equals(iccid)) iccidEdit.setText(iccid);
     }
 
     private void handleSpinner() {
@@ -155,5 +171,18 @@ public class MainActivity extends AppCompatActivity {
                 // Another interface callback
             }
         });
+    }
+
+    private void handleButton() {
+        Button button = (Button) findViewById(R.id.auto_button);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String iccid = readIccid();
+                EditText iccidEdit = (EditText) findViewById(R.id.iccid);
+                iccidEdit.setText(iccid);
+            }
+        });
+
     }
 }

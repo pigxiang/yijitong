@@ -6,10 +6,10 @@ android {
 
     defaultConfig {
         applicationId "org.hehe7xiao.yijitong"
-        minSdkVersion 21
+        minSdkVersion 19
         targetSdkVersion 23
         versionCode 0
-        versionName "2.3.0"
+        versionName "2.5.0"
         multiDexEnabled true
     }
     buildTypes {
