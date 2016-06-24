@@ -1,8 +1,6 @@
 package org.hehe7xiao.yijitong;
 
 
-import android.text.TextUtils;
-
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.JsonNode;
 import com.mashape.unirest.http.Unirest;
@@ -12,7 +10,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.HashMap;
-import java.util.List;
 
 public class YJT {
     private String phone;
@@ -41,6 +38,7 @@ public class YJT {
             put("Host", "www.yijitongoa.com:9090");
             put("User-Agent", "yjt-oa");
             put("Connection", "Keep-Alive");
+            put("Accept-Encoding", "gzip, deflate");
         }
     };
 
@@ -68,13 +66,12 @@ public class YJT {
 
             }
         };
-        JSONObject body = new JSONObject(fields);
         try {
             HttpResponse<JsonNode> response = Unirest.post(url)
                     .headers(this.headers)
-                    .body(body)
+                    .fields(fields)
                     .asJson();
-            if (response.getStatus() == 200) {
+            if (response.getCode() == 200) {
                 JSONObject j = response.getBody().getObject();
                 JSONObject payload = (JSONObject) j.getJSONArray("payload").get(0);
                 this.custName = payload.getString("custName");
@@ -114,15 +111,14 @@ public class YJT {
 
             }
         };
-        JSONObject body = new JSONObject(fields);
         try {
             HttpResponse<JsonNode> response = Unirest.post(url)
                     .headers(this.headers)
-                    .body(body)
+                    .fields(fields)
                     .asJson();
-            if (response.getStatus() == 200) {
-                List<String> cookies = response.getHeaders().get("Set-Cookie");
-                this.headers.put("Cookie", TextUtils.join("; ", cookies));
+            if (response.getCode() == 200) {
+                String cookies = response.getHeaders().get("Set-Cookie");
+                this.headers.put("Cookie", cookies);
                 this.isLogin = true;
                 return true;
             } else {
@@ -160,13 +156,12 @@ public class YJT {
                     put("userId", userid);
                 }
             };
-            JSONObject body = new JSONObject(fields);
             try {
                 HttpResponse<JsonNode> response = Unirest.post(url)
                         .headers(this.headers)
-                        .body(body)
+                        .fields(fields)
                         .asJson();
-                if (response.getStatus() == 200) {
+                if (response.getCode() == 200) {
                     JSONObject j = response.getBody().getObject();
                     return j.getJSONObject("payload").getString("signResultDesc");
                 }
