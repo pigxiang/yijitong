@@ -3,6 +3,7 @@ package org.hehe7xiao.yijitong;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -126,7 +127,13 @@ public class MainActivity extends AppCompatActivity {
 
         switch (id) {
             case R.id.menu_about:
-                Toast.makeText(MainActivity.this, R.string.version, Toast.LENGTH_SHORT).show();
+                String version = "";
+                try {
+                    version = getPackageManager().getPackageInfo(getPackageName(), 0).versionName;
+                } catch (PackageManager.NameNotFoundException e) {
+                    version = "Unknown";
+                }
+                Toast.makeText(MainActivity.this, version, Toast.LENGTH_SHORT).show();
                 break;
             default:
                 break;

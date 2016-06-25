@@ -8,7 +8,7 @@ android {
         applicationId "org.hehe7xiao.yijitong"
         minSdkVersion 16
         targetSdkVersion 23
-        versionCode 0
+        versionCode 1
         versionName "2.6.0"
         multiDexEnabled true
     }
@@ -36,9 +36,9 @@ android {
 
 
 repositories {
-    maven {
-        url 'https://raw.github.com/zeeshanejaz/unirest-android/mvn-repo'
-    }
+//    maven {
+//        url 'https://raw.github.com/zeeshanejaz/unirest-android/mvn-repo'
+//    }
 }
 
 dependencies {
