@@ -66,10 +66,12 @@ public class YJT {
 
             }
         };
+        String body = (new JSONObject(fields)).toString();
+
         try {
             HttpResponse<JsonNode> response = Unirest.post(url)
                     .headers(this.headers)
-                    .fields(fields)
+                    .body(body)
                     .asJson();
             if (response.getCode() == 200) {
                 JSONObject j = response.getBody().getObject();
@@ -111,10 +113,12 @@ public class YJT {
 
             }
         };
+        String body = (new JSONObject(fields)).toString();
+
         try {
             HttpResponse<JsonNode> response = Unirest.post(url)
                     .headers(this.headers)
-                    .fields(fields)
+                    .body(body)
                     .asJson();
             if (response.getCode() == 200) {
                 String cookies = response.getHeaders().get("Set-Cookie");
@@ -156,10 +160,13 @@ public class YJT {
                     put("userId", userid);
                 }
             };
+
+            String body = (new JSONObject(fields)).toString();
+
             try {
                 HttpResponse<JsonNode> response = Unirest.post(url)
                         .headers(this.headers)
-                        .fields(fields)
+                        .body(body)
                         .asJson();
                 if (response.getCode() == 200) {
                     JSONObject j = response.getBody().getObject();
