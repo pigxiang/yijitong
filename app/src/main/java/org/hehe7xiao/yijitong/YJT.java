@@ -34,7 +34,7 @@ public class YJT {
         {
             put("Content-Type", "application/json; charset=utf-8");
             put("apiVer", "1");
-            put("clientVersion", "android_10373");
+            put("clientVersion", "android_10641");
             put("Host", "www.yijitongoa.com:9090");
             put("User-Agent", "yjt-oa");
             put("Connection", "Keep-Alive");
