@@ -1,5 +1,6 @@
 package org.hehe7xiao.yijitong;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
@@ -11,6 +12,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.telephony.TelephonyManager;
@@ -36,14 +38,18 @@ public class MainActivity extends AppCompatActivity {
     private Geo geo = geos.get(0);
     private PendingIntent pendingIntent;
 
-    private Handler handler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            if (msg.what == 0) {
-                tv.setText(msg.getData().getString("result"));
+    private Handler handler;
+
+    {
+        handler = new Handler() {
+            @Override
+            public void handleMessage(Message msg) {
+                if (msg.what == 0) {
+                    tv.setText(msg.getData().getString("result"));
+                }
             }
-        }
-    };
+        };
+    }
 
     private TextView tv;
 
@@ -61,7 +67,7 @@ public class MainActivity extends AppCompatActivity {
         handleSpinner();
         handleEditText();
         handleButton();
-        startAlarm();
+//        startAlarm();
         tv = (TextView) findViewById(R.id.tv);
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -81,6 +87,17 @@ public class MainActivity extends AppCompatActivity {
         String iccid = "";
         try {
             TelephonyManager tm = (TelephonyManager) MainActivity.this.getSystemService(Context.TELEPHONY_SERVICE);
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
+                // TODO: Consider calling
+                //    ActivityCompat#requestPermissions
+                // here to request the missing permissions, and then overriding
+                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                //                                          int[] grantResults)
+                // to handle the case where the user grants the permission. See the documentation
+                // for ActivityCompat#requestPermissions for more details.
+                return "No Permission";
+            }
+            assert tm != null;
             iccid = tm.getSimSerialNumber();
         } catch (Exception e) {
             e.printStackTrace();
@@ -106,7 +123,7 @@ public class MainActivity extends AppCompatActivity {
             editor.putString("phone", phone);
             editor.putString("password", password);
             editor.putString("iccid", iccid);
-            editor.commit();
+            editor.apply();
 
             user = new YJT(phone, password, iccid, geo);
 //            user = new YJT(phone, password, iccid);
@@ -137,7 +154,7 @@ public class MainActivity extends AppCompatActivity {
 
         switch (id) {
             case R.id.menu_about:
-                String version = "";
+                String version;
                 try {
                     version = getPackageManager().getPackageInfo(getPackageName(), 0).versionName;
                 } catch (PackageManager.NameNotFoundException e) {
@@ -201,20 +218,5 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-    }
-
-    private void startAlarm() {
-        AlarmManager manager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-        int interval = 1000 * 10;
-
-        /* Set the alarm to start at 10:30 AM */
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTimeInMillis(System.currentTimeMillis());
-        calendar.set(Calendar.HOUR_OF_DAY, 2);
-        calendar.set(Calendar.MINUTE, 58);
-
-        /* Repeating on every 20 minutes interval */
-        manager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
-                interval, pendingIntent);
     }
 }
