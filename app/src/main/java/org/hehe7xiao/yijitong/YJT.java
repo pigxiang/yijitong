@@ -27,7 +27,7 @@ public class YJT {
         return userid;
     }
 
-    private final String url = "http://www.yijitongoa.com:9090";
+    private final String url = "https://www.yijitongoa.com";
 
 
     private HashMap<String, String> headers = new HashMap<String, String>() {
@@ -35,7 +35,7 @@ public class YJT {
             put("Content-Type", "application/json; charset=utf-8");
             put("apiVer", "1");
             put("clientVersion", "android_10641");
-            put("Host", "www.yijitongoa.com:9090");
+            put("Host", "www.yijitongoa.com");
             put("User-Agent", "yjt-oa");
             put("Connection", "Keep-Alive");
             put("Accept-Encoding", "gzip, deflate");

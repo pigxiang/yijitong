@@ -2,21 +2,21 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 23
-    buildToolsVersion "23.0.2"
+    buildToolsVersion '25.0.0'
 
     defaultConfig {
         applicationId "org.hehe7xiao.yijitong"
         minSdkVersion 16
         targetSdkVersion 23
         versionCode 1
-        versionName "2.7.1"
+        versionName "2.7.2"
         multiDexEnabled true
     }
     buildTypes {
         release {
             minifyEnabled false
             zipAlignEnabled true
-            shrinkResources true
+            shrinkResources false
             signingConfig getSigningConfig()
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             applicationVariants.all { variant ->
@@ -25,7 +25,7 @@ android {
                     def formattedDate = new Date().format('yyyyMMddHHmmss')
                     def newName = output.outputFile.name
                     newName = newName.replace("app-", "$project.ext.appName-") //"MyAppName" -> I set my app variables in the root project
-                    newName = newName.replace("-release", "-release" + formattedDate)
+                    newName = newName.replace("-release", "-release-" + defaultConfig.versionName + '-' + formattedDate)
                     //noinspection GroovyAssignabilityCheck
                     output.outputFile = new File(output.outputFile.parent, newName)
                 }
